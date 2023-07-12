@@ -1,8 +1,9 @@
-import type { GetServerSideProps } from "next";
+"use client";
+
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { BaseRecord, HttpError, RegisterFormTypes } from "@refinedev/core";
 import { useActiveAuthProvider, useRegister } from "@refinedev/core";
+import type { BaseRecord, HttpError, RegisterFormTypes } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
@@ -17,7 +18,6 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { authProvider } from "src/authProvider";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -26,7 +26,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function Register() {
+export default function Page() {
   const authProvider = useActiveAuthProvider();
   const { mutate: registerMutate, isLoading } = useRegister<RegisterFormTypes>({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
@@ -106,23 +106,3 @@ export default function Register() {
     </>
   );
 }
-
-Register.noLayout = true;
-
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const { authenticated, redirectTo } = await authProvider.check(context);
-
-  if (authenticated) {
-    return {
-      props: {},
-      redirect: {
-        destination: redirectTo ?? "/home",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

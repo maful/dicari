@@ -9,7 +9,7 @@ import nookies from "nookies";
 
 import { supabaseClient } from "./supabaseClient";
 
-const COOKIES_KEY = "dicari_token";
+export const COOKIES_KEY = "dicari_token";
 
 export const authProvider: AuthBindings = {
   login: async ({ email, password }: Required<LoginFormTypes>) => {
@@ -33,7 +33,7 @@ export const authProvider: AuthBindings = {
 
       return {
         success: true,
-        redirectTo: "/home",
+        redirectTo: "/dashboard",
       };
     }
 
@@ -42,7 +42,7 @@ export const authProvider: AuthBindings = {
       success: false,
       error: {
         name: "LoginError",
-        message: "Invalid username or password",
+        message: "Invalid email or password",
       },
     };
   },
@@ -114,9 +114,8 @@ export const authProvider: AuthBindings = {
   updatePassword: async ({ password }: Required<UpdatePasswordFormTypes>) => {
     return { success: false };
   },
-  check: async (ctx) => {
-    const cookies = nookies.get(ctx);
-    const { data } = await supabaseClient.auth.getUser(cookies[COOKIES_KEY]);
+  check: async (jwt) => {
+    const { data } = await supabaseClient.auth.getUser(jwt);
     const { user } = data;
 
     if (user) {
