@@ -5,49 +5,44 @@ import type {
   RegisterFormTypes,
   UpdatePasswordFormTypes,
 } from "@refinedev/core";
-import nookies from "nookies";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { supabaseClient } from "./supabaseClient";
-
-export const COOKIES_KEY = "dicari_token";
+const supabaseClient = createClientComponentClient();
 
 export const authProvider: AuthBindings = {
   login: async ({ email, password }: Required<LoginFormTypes>) => {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
+      if (error) {
+        return {
+          success: false,
+          error,
+        };
+      }
+
+      if (data?.user) {
+        return { success: true, redirectTo: "/app" };
+      }
+    } catch (error: any) {
       return {
         success: false,
         error,
       };
     }
 
-    if (data?.session) {
-      nookies.set(null, COOKIES_KEY, data.session.access_token, {
-        maxAge: 30 * 24 * 60 * 60,
-        path: "/",
-      });
-
-      return {
-        success: true,
-        redirectTo: "/dashboard",
-      };
-    }
-
-    // for third-party login
     return {
       success: false,
       error: {
-        name: "LoginError",
-        message: "Invalid email or password",
+        message: "Login failed",
+        name: "Invalid email or password",
       },
     };
   },
   logout: async () => {
-    nookies.destroy(null, COOKIES_KEY);
     const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
@@ -59,7 +54,7 @@ export const authProvider: AuthBindings = {
 
     return {
       success: true,
-      redirectTo: "/login",
+      redirectTo: "/",
     };
   },
   register: async ({ email, password }: Required<RegisterFormTypes>) => {
@@ -67,6 +62,9 @@ export const authProvider: AuthBindings = {
       const { data, error } = await supabaseClient.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${location.origin}/auth/callback`,
+        },
       });
 
       if (error) {
@@ -114,19 +112,36 @@ export const authProvider: AuthBindings = {
   updatePassword: async ({ password }: Required<UpdatePasswordFormTypes>) => {
     return { success: false };
   },
-  check: async (jwt) => {
-    const { data } = await supabaseClient.auth.getUser(jwt);
-    const { user } = data;
+  check: async () => {
+    try {
+      const { data } = await supabaseClient.auth.getSession();
+      const { session } = data;
 
-    if (user) {
+      if (!session) {
+        return {
+          authenticated: false,
+          error: {
+            message: "Check failed",
+            name: "Session not found",
+          },
+          logout: true,
+          redirectTo: "/login",
+        };
+      }
+    } catch (error: any) {
       return {
-        authenticated: true,
+        authenticated: false,
+        error: error || {
+          message: "Check failed",
+          name: "Session not found",
+        },
+        logout: true,
+        redirectTo: "/login",
       };
     }
 
     return {
-      authenticated: false,
-      redirectTo: "/login",
+      authenticated: true,
     };
   },
   getPermissions: async () => {
@@ -142,10 +157,7 @@ export const authProvider: AuthBindings = {
     const { data } = await supabaseClient.auth.getUser();
 
     if (data?.user) {
-      return {
-        ...data.user,
-        name: data.user.email,
-      };
+      return data.user;
     }
 
     return null;

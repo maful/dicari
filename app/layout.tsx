@@ -1,12 +1,11 @@
 "use client";
 
 import { Inter } from "next/font/google";
+import { authProvider } from "@/authProvider";
+import { cn } from "@/utils";
 import { Refine } from "@refinedev/core";
 import routerProvider from "@refinedev/nextjs-router/app";
 import dataProvider from "@refinedev/simple-rest";
-
-import { authProvider } from "src/authProvider";
-import { cn } from "src/utils";
 
 import "@styles/global.css";
 

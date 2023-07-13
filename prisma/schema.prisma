@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id        Int       @id @default(autoincrement())
+  publicId  String    @default(cuid()) @map("public_id")
+  title     String
+  email     String
+  paused    Boolean   @default(false)
+  pausedAt  DateTime? @map("paused_at")
+  closed    Boolean   @default(false)
+  closedAt  DateTime? @map("closed_at")
+  userId    String    @map("user_id") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@index([publicId])
+  @@index([userId])
+  @@map("jobs")
+}

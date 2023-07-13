@@ -1,6 +1,5 @@
+import { cn } from "@/utils";
 import Balancer from "react-wrap-balancer";
-
-import { cn } from "src/utils";
 
 export default function Page() {
   return (

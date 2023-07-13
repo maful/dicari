@@ -42,7 +42,8 @@
       ],
       "@public": [
         "public"
-      ]
+      ],
+      "@/*": ["./src/*"]
     },
     "incremental": true,
     "plugins": [

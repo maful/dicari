@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Authenticated } from "@refinedev/core";
+import { cn } from "@/utils";
+import { Authenticated, useLogout } from "@refinedev/core";
 import {
   Airplay,
   BookOpen,
@@ -14,15 +15,22 @@ import {
 
 import { Button } from "@components/ui/button";
 import { ScrollArea } from "@components/ui/scroll-area";
-import { cn } from "src/utils";
 
 function MainNav() {
+  const { mutate: logout } = useLogout();
+
   return (
     <div className="mr-4 hidden md:flex">
       <Link href="/" className="mr-6 flex items-center space-x-2">
         DICARI
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
+        <button
+          className="transition-colors hover:text-foreground/80 text-foreground/60"
+          onClick={() => logout()}
+        >
+          Logout
+        </button>
         <Link
           href="/docs"
           className="transition-colors hover:text-foreground/80 text-foreground/60"
