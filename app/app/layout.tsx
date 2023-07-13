@@ -113,21 +113,19 @@ function SidebarNav() {
 
   return (
     <div className="w-full">
-      <div className="grid grid-flow-row auto-rows-max text-sm">
+      <div className="space-y-1">
         {items.map((item, index) => (
-          <Link
-            href={item.href}
+          <Button
             key={index}
-            className={cn(
-              "flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:underline",
-              pathname === item.href
-                ? "font-medium text-foreground"
-                : "text-muted-foreground"
-            )}
+            variant={pathname === item.href ? "secondary" : "ghost"}
+            className="w-full justify-start"
+            asChild
           >
-            {item.icon}
-            {item.title}
-          </Link>
+            <Link href={item.href}>
+              {item.icon}
+              {item.title}
+            </Link>
+          </Button>
         ))}
       </div>
     </div>
@@ -144,14 +142,14 @@ export default function DashboardLayout({
       <div className="relative flex min-h-screen flex-col">
         <SiteHeader />
         <div className="flex-1">
-          <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
-            <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 md:sticky md:block">
+          <div className="container grid lg:grid-cols-5">
+            <aside className="block">
               <ScrollArea className="h-full py-6 pl-8 pr-6 lg:py-8">
                 <SidebarNav />
               </ScrollArea>
             </aside>
-            <main className="relative py-6 lg:gap-10 lg:py-8 xl:grid">
-              <div className="mx-auto w-full min-w-0">{children}</div>
+            <main className="col-span-3 lg:col-span-4 lg:border-l">
+              <div className="h-full px-4 py-6 lg:px-8">{children}</div>
             </main>
           </div>
         </div>
