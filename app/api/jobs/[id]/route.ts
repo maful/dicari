@@ -26,3 +26,22 @@ export async function GET(
     );
   }
 }
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const body = await request.json();
+    const job = await prisma.job.update({
+      where: { publicId: params.id },
+      data: body,
+    });
+    return NextResponse.json(job);
+  } catch (e) {
+    return NextResponse.json(
+      { message: "Unable to update job" },
+      { status: 400 }
+    );
+  }
+}
