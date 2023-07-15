@@ -79,7 +79,7 @@ export default function Page() {
       <div className="pb-12 pt-8">
         <div className="flex flex-col gap-6">
           {jobs.map((job) => (
-            <Link key={job.id} href={`/jobs/${job.publicId}`}>
+            <Link key={job.id} href={`/app/jobs/${job.publicId}`}>
               <Card>
                 <CardHeader className="flex flex-row items-start gap-4 space-y-0">
                   <div className="space-y-1 flex-1">

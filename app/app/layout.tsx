@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/utils";
 import { Authenticated, useLogout } from "@refinedev/core";
 import {
   Airplay,

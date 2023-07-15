@@ -12,7 +12,7 @@ datasource db {
 
 model Job {
   id        Int       @id @default(autoincrement())
-  publicId  String    @default(cuid()) @map("public_id")
+  publicId  String    @unique @default(cuid()) @map("public_id")
   title     String
   email     String
   paused    Boolean   @default(false)
@@ -23,7 +23,6 @@ model Job {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
-  @@index([publicId])
   @@index([userId])
   @@map("jobs")
 }
