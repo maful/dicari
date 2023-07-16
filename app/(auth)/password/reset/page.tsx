@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForgotPassword } from "@refinedev/core";
 import type {
   BaseRecord,
@@ -11,7 +11,7 @@ import type {
 } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
 import { Loader2 } from "lucide-react";
-import { z } from "zod";
+import * as yup from "yup";
 
 import { Button } from "@components/ui/button";
 import {
@@ -24,23 +24,24 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 
-const formSchema = z.object({
-  email: z.string().email(),
+const formSchema = yup.object({
+  email: yup.string().email().required(),
 });
+
+type FormValues = yup.InferType<typeof formSchema>;
 
 export default function Page() {
   const [requestSuccess, setRequestSuccess] = useState<boolean>(false);
-  const { mutate: forgotPassword, isLoading } =
-    useForgotPassword<ForgotPasswordFormTypes>();
+  const { mutate: forgotPassword, isLoading } = useForgotPassword<FormValues>();
 
-  const form = useForm<BaseRecord, HttpError, ForgotPasswordFormTypes>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<BaseRecord, HttpError, FormValues>({
+    resolver: yupResolver(formSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  function onSubmit(data: ForgotPasswordFormTypes) {
+  function onSubmit(data: FormValues) {
     forgotPassword(data, {
       onSuccess: (data) => {
         if (data.success) {

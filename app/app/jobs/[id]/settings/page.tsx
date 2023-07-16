@@ -1,9 +1,9 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { yupResolver } from "@hookform/resolvers/yup";
 import type { BaseRecord, HttpError } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
-import { z } from "zod";
+import * as yup from "yup";
 
 import { Button } from "@components/ui/button";
 import {
@@ -23,12 +23,12 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 
-const formSchema = z.object({
-  title: z.string().min(1, "Job title is required"),
-  email: z.string().email(),
+const formSchema = yup.object({
+  title: yup.string().required().label("Job title"),
+  email: yup.string().email().required().label("Contact email"),
 });
 
-type GeneralFormValues = z.infer<typeof formSchema>;
+type GeneralFormValues = yup.InferType<typeof formSchema>;
 
 export default function Page({ params }: { params: { id: string } }) {
   const { refineCore, ...form } = useForm<
@@ -40,8 +40,9 @@ export default function Page({ params }: { params: { id: string } }) {
       action: "edit",
       resource: "jobs",
       id: params.id,
+      redirect: false,
     },
-    resolver: zodResolver(formSchema),
+    resolver: yupResolver(formSchema),
     defaultValues: {
       title: "",
       email: "",

@@ -19,12 +19,12 @@ import {
   PageHeaderHeading,
 } from "@components/page-header";
 
-interface JobLayout {
+interface JobLayoutProps {
   children: React.ReactNode;
   params: { id: string };
 }
 
-export default function JobLayout({ children, params }: JobLayout) {
+export default function JobLayout({ children, params }: JobLayoutProps) {
   const { data, isError } = useOne<Job>({
     resource: "jobs",
     id: params.id,

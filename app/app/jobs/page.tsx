@@ -14,6 +14,7 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from "@components/page-header";
+import JobNewResource from "@components/resources/jobs/new";
 
 dayjs.extend(relativeTime);
 
@@ -72,9 +73,16 @@ export default function Page() {
 
   return (
     <>
-      <div className="space-y-0.5">
-        <PageHeaderHeading>Jobs</PageHeaderHeading>
-        <PageHeaderDescription>View and manage all jobs</PageHeaderDescription>
+      <div className="flex flex-row gap-4 items-start">
+        <div className="space-y-0.5 flex-1">
+          <PageHeaderHeading>Jobs</PageHeaderHeading>
+          <PageHeaderDescription>
+            View and manage all jobs
+          </PageHeaderDescription>
+        </div>
+        <div>
+          <JobNewResource />
+        </div>
       </div>
       <div className="pb-12 pt-8">
         <div className="flex flex-col gap-6">

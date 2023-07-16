@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useActiveAuthProvider, useRegister } from "@refinedev/core";
 import type { BaseRecord, HttpError, RegisterFormTypes } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
 import { Loader2 } from "lucide-react";
-import { z } from "zod";
+import * as yup from "yup";
 
 import { Button } from "@components/ui/button";
 import {
@@ -19,28 +19,28 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
+const formSchema = yup.object({
+  email: yup.string().required().email(),
+  password: yup.string().min(8).required(),
 });
+
+type FormValues = yup.InferType<typeof formSchema>;
 
 export default function Page() {
   const authProvider = useActiveAuthProvider();
-  const { mutate: registerMutate, isLoading } = useRegister<RegisterFormTypes>({
+  const { mutate: registerMutate, isLoading } = useRegister<FormValues>({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
 
-  const form = useForm<BaseRecord, HttpError, RegisterFormTypes>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<BaseRecord, HttpError, FormValues>({
+    resolver: yupResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(data: RegisterFormTypes) {
+  function onSubmit(data: FormValues) {
     registerMutate(data);
   }
 

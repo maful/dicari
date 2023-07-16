@@ -65,6 +65,13 @@ export default function RootLayout({
                 label: "Dashboard",
               },
             },
+            {
+              name: "jobs",
+              list: "/app/jobs",
+              meta: {
+                label: "All jobs",
+              },
+            },
           ]}
           options={{
             syncWithLocation: true,
