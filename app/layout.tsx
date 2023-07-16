@@ -59,10 +59,10 @@ export default function RootLayout({
           notificationProvider={notificationProvider}
           resources={[
             {
-              name: "dashboard",
-              list: "/dashboard",
+              name: "overview",
+              list: "/app",
               meta: {
-                label: "Dashboard",
+                label: "Overview",
               },
             },
             {

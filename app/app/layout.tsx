@@ -1,19 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Authenticated, useLogout } from "@refinedev/core";
-import {
-  Airplay,
-  BookOpen,
-  Github,
-  Luggage,
-  Twitter,
-  Users,
-} from "lucide-react";
+import { Github, Twitter } from "lucide-react";
 
 import { Button } from "@components/ui/button";
 import { ScrollArea } from "@components/ui/scroll-area";
+import Menu from "@components/menu";
 
 function MainNav() {
   const { mutate: logout } = useLogout();
@@ -85,52 +78,6 @@ function SiteHeader() {
   );
 }
 
-function SidebarNav() {
-  const pathname = usePathname();
-  const items = [
-    {
-      title: "Overview",
-      href: "/app",
-      icon: <Airplay className="h-4 w-4 mr-2" />,
-    },
-    {
-      title: "All jobs",
-      href: "/app/jobs",
-      icon: <Luggage className="h-4 w-4 mr-2" />,
-    },
-    {
-      title: "All candidates",
-      href: "/app/candidates",
-      icon: <Users className="h-4 w-4 mr-2" />,
-    },
-    {
-      title: "Test library",
-      href: "/app/libraries",
-      icon: <BookOpen className="h-4 w-4 mr-2" />,
-    },
-  ];
-
-  return (
-    <div className="w-full">
-      <div className="space-y-1">
-        {items.map((item, index) => (
-          <Button
-            key={index}
-            variant={pathname === item.href ? "secondary" : "ghost"}
-            className="w-full justify-start"
-            asChild
-          >
-            <Link href={item.href}>
-              {item.icon}
-              {item.title}
-            </Link>
-          </Button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function DashboardLayout({
   children,
 }: {
@@ -144,7 +91,7 @@ export default function DashboardLayout({
           <div className="container grid lg:grid-cols-5">
             <aside className="block">
               <ScrollArea className="h-full py-6 pl-8 pr-6 lg:py-8">
-                <SidebarNav />
+                <Menu />
               </ScrollArea>
             </aside>
             <main className="col-span-3 lg:col-span-4 lg:border-l">
