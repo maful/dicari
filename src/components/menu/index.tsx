@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 import { Airplay, BookOpen, Luggage, Users } from "lucide-react";
 
 import { Button } from "@components/ui/button";
@@ -41,9 +41,7 @@ const items: MenuItem[] = [
 ];
 
 export default function Menu() {
-  const pathname = usePathname();
   const segment = useSelectedLayoutSegment();
-  console.log("segment", segment);
 
   return (
     <div className="w-full">

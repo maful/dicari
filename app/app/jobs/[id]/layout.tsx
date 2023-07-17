@@ -1,7 +1,8 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, useSelectedLayoutSegment } from "next/navigation";
 import type { Job } from "@prisma/client";
 import { useOne } from "@refinedev/core";
 import { Archive, MonitorX, MoreVertical } from "lucide-react";
@@ -25,6 +26,8 @@ interface JobLayoutProps {
 }
 
 export default function JobLayout({ children, params }: JobLayoutProps) {
+  const [tabValue, setTabValue] = React.useState<string>("");
+  const segment = useSelectedLayoutSegment();
   const { data, isError } = useOne<Job>({
     resource: "jobs",
     id: params.id,
@@ -36,6 +39,14 @@ export default function JobLayout({ children, params }: JobLayoutProps) {
   if (isError) {
     notFound();
   }
+
+  React.useEffect(() => {
+    if (segment === null) {
+      setTabValue("overview");
+    } else {
+      setTabValue(segment);
+    }
+  }, [segment]);
 
   const job = data?.data;
 
@@ -71,11 +82,7 @@ export default function JobLayout({ children, params }: JobLayoutProps) {
         </div>
       </div>
 
-      <Tabs
-        className="w-full mt-4"
-        activationMode="manual"
-        defaultValue="overview"
-      >
+      <Tabs className="w-full mt-4" activationMode="manual" value={tabValue}>
         <TabsList className="w-full justify-start">
           <TabsTrigger value="overview" asChild>
             <Link href={`/app/jobs/${params.id}`}>Overview</Link>
