@@ -87,6 +87,9 @@ export default function JobLayout({ children, params }: JobLayoutProps) {
           <TabsTrigger value="overview" asChild>
             <Link href={`/app/jobs/${params.id}`}>Overview</Link>
           </TabsTrigger>
+          <TabsTrigger value="tests" asChild>
+            <Link href={`/app/jobs/${params.id}/tests`}>Tests</Link>
+          </TabsTrigger>
           <TabsTrigger value="statistics" asChild>
             <Link href={`/app/jobs/${params.id}/statistics`}>Statistics</Link>
           </TabsTrigger>

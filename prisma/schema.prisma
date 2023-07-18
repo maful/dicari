@@ -22,7 +22,19 @@ model Job {
   userId    String    @map("user_id") @db.Uuid
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
+  tests     JobTest[]
 
   @@index([userId])
   @@map("jobs")
+}
+
+model JobTest {
+  id        Int      @id @default(autoincrement())
+  question  Json
+  Job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobId     Int      @map("job_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("job_tests")
 }

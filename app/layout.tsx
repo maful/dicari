@@ -11,6 +11,7 @@ import { Toaster } from "@components/ui/toaster";
 import { toast, toastDismiss } from "@components/ui/use-toast";
 
 import "@styles/global.css";
+import "@styles/prosemirror.css";
 
 const fontSans = Inter({
   subsets: ["latin"],
