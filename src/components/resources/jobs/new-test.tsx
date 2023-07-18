@@ -21,7 +21,6 @@ import { Form } from "@components/ui/form";
 
 const formSchema = yup.object({
   question: yup.mixed<JSONContent>().required().label("Question"),
-  jobId: yup.string().required(),
 });
 
 type FormValues = yup.InferType<typeof formSchema>;
@@ -36,11 +35,19 @@ export default function JobNewTestResource(props: JobNewTestResourceProps) {
     HttpError,
     FormValues
   >({
-    refineCoreProps: { action: "create", resource: "tests" },
+    refineCoreProps: {
+      action: "create",
+      resource: `jobs/${props.jobId}/tests`,
+      successNotification: () => {
+        return {
+          message: "Test successfully created",
+          type: "success",
+        };
+      },
+    },
     resolver: yupResolver(formSchema),
     defaultValues: {
       question: {},
-      jobId: props.jobId,
     },
   });
 
