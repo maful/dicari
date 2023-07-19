@@ -43,7 +43,9 @@ export default function Page({ params }: { params: { id: string } }) {
       </div>
       <div className="space-y-4">
         {data?.pages.map((page) =>
-          page.data.map((test) => <JobTestView key={test.id} test={test} />)
+          page.data.map((test) => (
+            <JobTestView key={test.id} test={test} jobId={params.id} />
+          ))
         )}
       </div>
     </div>

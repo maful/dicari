@@ -144,7 +144,6 @@ function toast({ id: propsId, ...props }: Toast) {
   if (!id) {
     id = genId();
   }
-  console.log("id toast", id);
 
   const update = (props: ToasterToast) =>
     dispatch({
