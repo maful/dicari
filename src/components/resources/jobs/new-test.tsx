@@ -1,9 +1,11 @@
+"use client";
+
 import { yupResolver } from "@hookform/resolvers/yup";
-import { type JobTest } from "@prisma/client";
+import type { Job, JobTest } from "@prisma/client";
 import type { HttpError } from "@refinedev/core";
 import { useModalForm } from "@refinedev/react-hook-form";
 import { type JSONContent } from "@tiptap/react";
-import { Bot, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import * as yup from "yup";
 
 import { Button } from "@components/ui/button";
@@ -27,6 +29,7 @@ type FormValues = yup.InferType<typeof formSchema>;
 
 interface JobNewTestResourceProps {
   jobId: string;
+  job: Job | undefined;
 }
 
 export default function JobNewTestResource(props: JobNewTestResourceProps) {
@@ -80,36 +83,25 @@ export default function JobNewTestResource(props: JobNewTestResourceProps) {
             Enter a question for candidate or use AI to help you out.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-2">
-          <div className="flex justify-end">
-            <Button variant="outline" type="button" size="sm">
-              <Bot className="h-4 w-4 mr-2" />
-              Generate with AI
-            </Button>
-          </div>
+        <Editor
+          onUpdate={onQuestionUpdate}
+          aiInitialPrompt={props.job?.title}
+        />
+        <DialogFooter>
           <Form {...form}>
-            <form id="new_test" onSubmit={form.handleSubmit(modal.submit)}>
-              <div className="grid gap-4">
-                <Editor onUpdate={onQuestionUpdate} />
-              </div>
+            <form onSubmit={form.handleSubmit(modal.submit)}>
+              <Button type="submit" disabled={refineCore.formLoading}>
+                {refineCore.formLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "Save"
+                )}
+              </Button>
             </form>
           </Form>
-        </div>
-        <DialogFooter>
-          <Button
-            type="submit"
-            form="new_test"
-            disabled={refineCore.formLoading}
-          >
-            {refineCore.formLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </>
-            ) : (
-              "Save"
-            )}
-          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
