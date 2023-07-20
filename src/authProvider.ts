@@ -64,6 +64,9 @@ export const authProvider: AuthBindings = {
         password,
         options: {
           emailRedirectTo: `${location.origin}/auth/callback`,
+          data: {
+            role: "admin",
+          },
         },
       });
 
@@ -148,7 +151,7 @@ export const authProvider: AuthBindings = {
     const user = await supabaseClient.auth.getUser();
 
     if (user) {
-      return user.data.user?.role;
+      return user.data.user?.user_metadata.role ?? "candidate";
     }
 
     return null;

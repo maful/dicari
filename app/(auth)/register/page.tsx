@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useActiveAuthProvider, useRegister } from "@refinedev/core";
-import type { BaseRecord, HttpError, RegisterFormTypes } from "@refinedev/core";
+import type { BaseRecord, HttpError } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
 import { Loader2 } from "lucide-react";
 import * as yup from "yup";
@@ -20,8 +20,8 @@ import {
 import { Input } from "@components/ui/input";
 
 const formSchema = yup.object({
-  email: yup.string().required().email(),
-  password: yup.string().min(8).required(),
+  email: yup.string().required().email().label("Email"),
+  password: yup.string().required().min(8).label("Password"),
 });
 
 type FormValues = yup.InferType<typeof formSchema>;
