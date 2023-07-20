@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/utils";
 import Balancer from "react-wrap-balancer";
 
